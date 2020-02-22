@@ -48,31 +48,24 @@
 			        	<a class="nav-link" href="http://localhost:5000">Home<span class="sr-only">(current)</span></a>
 					</li>
 					
-					{% if logged %}
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          		Upload
 			        	</a>
 				        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 				        	
-								<a class="dropdown-item" href="/upload_facts">Nutrition Facts</a>
-								<a class="dropdown-item" href="/upload_ingredients">Ingredients</a>
+								<a class="dropdown-item" href="/facts">Nutrition Facts</a>
+								<a class="dropdown-item" href="/ingredients">Ingredients</a>
 							
 				        </div>
 			      	</li>
-					{% endif %}
 
 			      	<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          		Options
 			        	</a>
 				        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				        	{% if logged %}
-								<a class="dropdown-item" href="/logout">Logout</a>
-							{% else %}
-								<a class="dropdown-item" href="/login">Login</a>
-				          		<a class="dropdown-item" href="/register">Register</a>
-							{% endif %}
+				        	<a class="dropdown-item" href="/logout">Logout</a>
 				        </div>
 			      	</li>
 			      	<li class="nav-item">
@@ -87,28 +80,17 @@
 		</nav>
 
 		<div id="wrap">
-			<BR>
-			{% if logged %}
-				<h4 style="text-align: center">Daily Nutrition:</h4>
-				<BR>
-				<p style="text-align: center;">{{nutrients["calories"]}} calories consumed</p>
-				<p style="text-align: center;">{{nutrients["fats"]}} grams of fat consumed</p>
-				<p style="text-align: center;">{{nutrients["carbs"]}} grams of carbohydrates consumed</p>
-				<p style="text-align: center;">{{nutrients["sugar"]}} grams of sugar consumed</p>
+            
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="inputGroupFile02">
+                  <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                </div>
+              </div>
 
-			{% else %}
-
-				<h4 style="text-align: center">Welcome to Nutrition+!</h4>
-				<p style="text-align: center">
-					To get started, either
-					<a class="link" href="/login">login</a>
-					or
-					<a class="link" href="/register">register!</a>
-				</p>
-			{% endif %}
-			
-
-			
 
 		</div>
 

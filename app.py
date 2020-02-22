@@ -108,11 +108,17 @@ def register():
 
 @app.route("/facts")
 def facts():
-	return render_template("upload_facts.html")
+	if "userEmail" in session:
+		return render_template("upload_facts.html")
+	else:
+		return redirect(url_for("login"))
 
 @app.route("/ingredients")
 def ingredients():
-	return render_template("upload_ingredients.html")
+	if "userEmail" in session:
+		return render_template("upload_ingredients.html")
+	else:
+		return redirect(url_for("login"))
 
 @app.route("/logout")
 def logout():
