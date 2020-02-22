@@ -5,6 +5,7 @@
 		<title>Nutrition+</title>
 	</head>
 	<style type="text/css">
+
 		#wrap {
 			padding: 25px 0px;
 			position: fixed;
@@ -67,30 +68,24 @@
 				<a class="link" href="/login">login here!</a>
 			</p>
 
-			<form action="{{ url_for('register') }}" method="post" style="text-align: center">
-				Email:
-				<p style="text-align: center"><input type="text" name="em"></p>
-				Password:
-				<p style="text-align: center"><input type="Password" name="pw"></p>
-				
-				<!-- <p style="text-align: center"> -->
-					<input type="submit" 
-					       style="background-color: #4da7e8; 
-					              border: 2px solid #4da7e8;
-					              border-radius: 4px;
-					              color: white;
-					              padding: 8px 24px;
-					              text-align: center;
-					              text-decoration: none;
-					              display: inline-block;
-		  						  font-size: 16px;
-		  						  margin: 4px 2px;
-		  						  transition-duration: 0.4s;
-		  						  cursor: pointer;"
-		  				   value="Register">
-				<!-- </p> -->
-
+			<form action="{{ url_for('register') }}" method="post">
+					<div class="form-group">
+						<div style="padding: 15px 60px 0px;">
+							<label for="exampleInputEmail1">Email address</label>
+							<input type="text" class="form-control" name="em" id="exampleInputEmail1" aria-describedby="emailHelp">
+						</div>
+					</div>
+					<div class="form-group">
+						<div style="padding: 0px 60px;">
+							<label for="exampleInputPassword1">Password</label>
+							<input type="password" class="form-control" name="pw" id="exampleInputPassword1">
+						</div>
+					<div style="padding: 30px 265px">
+						<button type="submit" class="btn btn-primary" ">Register</button>
+					</div>
+				</div>
 			</form>
+
 		</div>
 
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
