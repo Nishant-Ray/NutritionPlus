@@ -1,12 +1,22 @@
+import os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
+from flask_session import Session
 
 app = Flask(__name__)
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 app.secret_key = "hello"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(minutes=5)
+
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 db = SQLAlchemy(app)
 
@@ -106,14 +116,32 @@ def register():
 		else:
 			return render_template("register.html")
 
-@app.route("/facts")
+@app.route("/facts", methods=["POST", "GET"])
 def facts():
 	if "userEmail" in session:
-		return render_template("upload_facts.html")
+		if request.method == "GET":
+			return render_template("upload_facts.html")
+		else:
+			target = os.path.join(APP_ROOT, "/")
+			print(target)
+
+			if not os.path.isdir(target):
+				os.mkdir(target)
+
+			for file in request.files.getlist("file"):
+				print(file)
+				filename = file.filename
+				destination = "/".join([target, filename])
+				print(destination)
+				file.save(destination)
+
+			return render_template("facts_info.html")
 	else:
 		return redirect(url_for("login"))
 
-@app.route("/ingredients")
+	
+
+@app.route("/ingredients", methods=["POST", "GET"])
 def ingredients():
 	if "userEmail" in session:
 		return render_template("upload_ingredients.html")
