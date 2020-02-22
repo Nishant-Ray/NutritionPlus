@@ -106,13 +106,13 @@ def register():
 		else:
 			return render_template("register.html")
 
-@app.route("/upload_facts")
-def upload_facts():
-	x = 5
+@app.route("/facts")
+def facts():
+	return render_template("upload_facts.html")
 
-@app.route("/upload_ingredients")
-def upload_ingredients():
-	x = 5
+@app.route("/ingredients")
+def ingredients():
+	return render_template("upload_ingredients.html")
 
 @app.route("/logout")
 def logout():
