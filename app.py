@@ -28,6 +28,8 @@ values["sugar"] = 0
 
 loggedIn = False
 
+factsCount = 1
+ingredientsCount = 1
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -118,11 +120,13 @@ def register():
 
 @app.route("/facts", methods=["POST", "GET"])
 def facts():
+	global factsCount
+	
 	if "userEmail" in session:
 		if request.method == "GET":
 			return render_template("upload_facts.html")
 		else:
-			target = os.path.join(APP_ROOT, "/")
+			target = os.path.join(APP_ROOT, "/Data/Family/Nishant/Flasks/AZHacks/factImages")
 			print(target)
 
 			if not os.path.isdir(target):
@@ -130,23 +134,51 @@ def facts():
 
 			for file in request.files.getlist("file"):
 				print(file)
-				filename = file.filename
+				filename = "facts_data" + str(factsCount) + ".jpg"
 				destination = "/".join([target, filename])
 				print(destination)
 				file.save(destination)
+				factsCount += 1
 
-			return render_template("facts_info.html")
+			return redirect(url_for("facts_info"))
 	else:
 		return redirect(url_for("login"))
 
-	
+@app.route("/facts_info")
+def facts_info():
+	return render_template("facts_info.html")
 
 @app.route("/ingredients", methods=["POST", "GET"])
 def ingredients():
+	global ingredientsCount
+	
 	if "userEmail" in session:
-		return render_template("upload_ingredients.html")
+		if request.method == "GET":
+			return render_template("upload_ingredients.html")
+		else:
+			target = os.path.join(APP_ROOT, "/Data/Family/Nishant/Flasks/AZHacks/ingredientsImages")
+			print(target)
+
+			if not os.path.isdir(target):
+				os.mkdir(target)
+
+			for file in request.files.getlist("file"):
+				print(file)
+				filename = "ingredients_data" + str(ingredientsCount) + ".jpg"
+				destination = "/".join([target, filename])
+				print(destination)
+				file.save(destination)
+				ingredientsCount += 1
+
+			
+
+			return redirect(url_for("ingredients_info"))
 	else:
 		return redirect(url_for("login"))
+
+@app.route("/ingredients_info")
+def ingredients_info():
+	return render_template("ingredients_info.html")
 
 @app.route("/logout")
 def logout():
@@ -174,6 +206,9 @@ def reset():
 	session.pop("userPass", None)
 
 	loggedIn = False
+
+	factsCount = 1
+	ingredientsCount = 1
 
 	return redirect(url_for("home"))
 

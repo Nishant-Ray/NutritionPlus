@@ -83,7 +83,7 @@
 			
 			<h4 style="text-align: center">Upload Nutrition Facts Label</h4>
 			
-			<form id="upload-form-fact" action="{{ url_for('facts') }}" method="POST" enctype="multipart/form-data">
+			<form id="upload-form-fact" action="{{ url_for('facts') }}" method="POST" enctype="multipart/form-data" style="padding: 40px 110px;">
 				<input type="file" name="file" accept="image/*" multiple>
 				<input type="submit" value="Upload">
 			</form>
