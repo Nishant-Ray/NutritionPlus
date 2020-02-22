@@ -53,18 +53,18 @@ def login():
 
 		if found_user:
 			if found_user.password == userPass:
-				flash("Login Successful!", "info")
+				#flash("Login Successful!", "info")
 				return redirect(url_for("home"))
 			else:
-				flash("Incorrect Password!", "error")
+				#flash("Incorrect Password!", "error")
 				return render_template("login.html")
 		else:
-			flash("This email does not correspond to an account!", "error")
+			#flash("This email does not correspond to an account!", "error")
 			return render_template("login.html")
 
 	else:
 		if "user" in session:
-			flash("Already Logged In!", "info")
+			#flash("Already Logged In!", "info")
 			return redirect(url_for("home"))
 		return render_template("login.html")
 
@@ -85,30 +85,22 @@ def register():
 		found_user = User.query.filter_by(email=userEmail).first()
 		
 		if found_user != None:
-			flash("This email is already in use!", "error")
+			#flash("This email is already in use!", "error")
 			return render_template("register.html")
 		else:
 			usr = User(email=userEmail, password=userPass)
 			db.session.add(usr)
 			db.session.commit()
 			loggedIn = True
-			flash("Registration Successful!", "info")
+			#flash("Registration Successful!", "info")
 			return render_template("index.html", logged=True)
 	else:
 		if "userEmail" in session:
-			flash("Already Logged In!", "info")
+			#flash("Already Logged In!", "info")
 			return redirect(url_for("home"))
 		else:
-			flash("GET", "info")
 			return render_template("register.html")
 
-@app.route("/add")
-def add():
-	if "userEmail" in session:
-		return render_template("add.html")
-	else:
-		flash("Login to Add Food Values!")
-		return redirect(url_for("login"))
 
 @app.route("/logout")
 def logout():
@@ -120,9 +112,9 @@ def logout():
 		session.pop("userPass", None)
 
 		loggedIn = False
-		flash("You have been logged out!", "info")
-	else:
-		flash("You are not logged in!", "error")
+		#flash("You have been logged out!", "info")
+	#else:
+		#flash("You are not logged in!", "error")
 	
 	return redirect(url_for("home"))
 
