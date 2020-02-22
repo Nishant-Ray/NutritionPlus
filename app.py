@@ -5,60 +5,51 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.secret_key = "hello"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(minutes=5)
 
 db = SQLAlchemy(app)
 
 values = {}
-values["calories"] = 0
-values["fats"] = 0
-values["sugars"] = 0
-values["carbs"] = 0
 loggedIn = False
 
 
-class users(db.Model):
-	_id = db.Column("id", db.Integer, primary_key=True)
+class User(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
 	email = db.Column(db.String(100), nullable=False)
 	password = db.Column(db.String(100), nullable=False)
 
-	calories = db.Column(db.Integer)
-	fats = db.Column(db.Integer)
-	sugars = db.Column(db.Integer)
-	carbs = db.Column(db.Integer)
 
-	def __init__(self, email, password):
-		self.email = email
-		self.password = password
-		self.calories = values["calories"]
-		self.fats = values["fats"]
-		self.sugars = values["sugars"]
-		self.carbs = values["carbs"]
+	def __repr__(self):
+		return '<User %r>' % self.email
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-	return render_template("index.html", logged=loggedIn, nutrients=values)
+	if "userEmail" in session:
+		return render_template("index.html", logged=True, nutrients=values)
+	else:
+		return render_template("index.html", logged=False, nutrients=values)
 
 @app.route("/view")
 def view():
-	return render_template("view.html", data=users.query.all())
+	return render_template("view.html", data=User.query.all())
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
 	if request.method == "POST":
-		loggedIn = True
+		
 		session.permanent = True
 
 		userEmail = request.form["em"]
 		userPass = request.form["pw"]
-		
+
 		session["userEmail"] = userEmail
 		session["userPass"] = userPass
 
-		found_user = users.query.filter_by(email=userEmail).first()
+		found_user = User.query.filter_by(email=userEmail).first()
 
 		if found_user:
 			if found_user.password == userPass:
@@ -81,7 +72,6 @@ def login():
 def register():
 
 	if request.method == "POST":
-		loggedIn = True
 		session.permanent = True
 		
 		userEmail = request.form["em"]
@@ -90,18 +80,20 @@ def register():
 		session["userEmail"] = userEmail
 		session["userPass"] = userPass
 
-		found_user = users.query.filter_by(email=userEmail).first()
+		db.create_all()
+
+		found_user = User.query.filter_by(email=userEmail).first()
 		
 		if found_user != None:
 			flash("This email is already in use!", "error")
 			return render_template("register.html")
 		else:
-			usr = users(userEmail, userPass)
+			usr = User(email=userEmail, password=userPass)
 			db.session.add(usr)
 			db.session.commit()
-
+			loggedIn = True
 			flash("Registration Successful!", "info")
-			return redirect(url_for("home"))
+			return render_template("index.html", logged=True)
 	else:
 		if "userEmail" in session:
 			flash("Already Logged In!", "info")
@@ -112,7 +104,7 @@ def register():
 
 @app.route("/add")
 def add():
-	if loggedIn:
+	if "userEmail" in session:
 		return render_template("add.html")
 	else:
 		flash("Login to Add Food Values!")
@@ -122,7 +114,7 @@ def add():
 def logout():
 	if "userEmail" in session:
 		userEmail = session["userEmail"]
-		userPass = session["password"]
+		userPass = session["userPass"]
 
 		session.pop("userEmail", None)
 		session.pop("userPass", None)
@@ -136,7 +128,7 @@ def logout():
 
 @app.route("/reset")
 def reset():
-	users.query.delete()
+	User.query.delete()
 	db.session.commit()
 
 	session.pop("userName", None)
