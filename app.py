@@ -11,6 +11,11 @@ app.permanent_session_lifetime = timedelta(minutes=5)
 db = SQLAlchemy(app)
 
 values = {}
+values["calories"] = 0
+values["fats"] = 0
+values["carbs"] = 0
+values["sugar"] = 0
+
 loggedIn = False
 
 
@@ -101,6 +106,13 @@ def register():
 		else:
 			return render_template("register.html")
 
+@app.route("/upload_facts")
+def upload_facts():
+	x = 5
+
+@app.route("/upload_ingredients")
+def upload_ingredients():
+	x = 5
 
 @app.route("/logout")
 def logout():
